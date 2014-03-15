@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!--
     Licensed to the Apache Software Foundation (ASF) under one
     or more contributor license agreements.  See the NOTICE file
@@ -22,102 +22,168 @@
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <!-- <link rel="stylesheet" type="text/css" href="css/index.css" /> -->
-	<link rel="stylesheet" type="text/css" href="js/jqm/jquery.mobile-1.4.0.css" />
-	<script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
-	<script type="text/javascript" src="js/jqm/jquery.mobile-1.4.0.js"></script>
-	<script type="text/javascript" src="js/Generator.js"></script> 
-	<title>Snille</title>
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />      
+		<link rel="stylesheet" type="text/css" href="js/lib/jqm/jquery.mobile.css" />
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<link rel="stylesheet" type="text/css" href="css/buttons.css" />
+		<link rel="stylesheet" type="text/css" href="css/gradients.css" />
+		<link rel="stylesheet" type="text/css" href="css/settings.css" />
+		<link rel="stylesheet" type="text/css" href="css/stats.css" />
+		<script data-main="js/main.js" src="js/require.js"></script>
+		<title>Snille</title>
     </head>
     <body>
-	
-	<div data-role="page" id="front">
-		<div data-role="header">
+		<!--<audio class="sound" hidden="hidden" src="res/sounds/click.mp3"></audio>
+		<audio class="music" hidden="hidden" src="res/sounds/music.mp3"></audio>-->
+
+		
+		<audio class="click-sound" hidden="hidden">
+			<source src="res/sounds/click.mp3" type="audio/mpeg" >
+		</audio>
+		<audio class="music" loop="loop" hidden="hidden">
+			<source src="res/sounds/music.mp3" type="audio/mpeg" >
+		</audio>
+	<div data-role="page" id="front" >
+		<!--
+		<div data-role="header" data-position="fixed">
 			<h1>Snille</h1>
-			<a href="#settings" data-icon="gear" class="ui-btn-right">Settings</a>
+			<a href="#settings" id="settingsBtn" data-icon="gear" class="ui-btn-right play-click">Settings</a>
 		</div>
-		<div data-role="content">
-			<div>
-				<a href="#questions" data-role="button">Start</a>
-			</div>
-			<div>
-				<a id="settings" href="#settings" data-role="button">Settings</a>
-			</div>
+		-->
+		<div data-role="content" class="front-content">
+			<a href="#settings" data-icon="gear" class="ui-btn-right settings-button play-click"><img src="img/options.png"></a>
+			<a href="#questions" data-role="button" class="start-button button">START</a>
 		</div>
-		<div data-role="footer"></div>
+		</div>
 	</div>
 	<div data-role="page" id="questions">
-		<div data-role="header"></div>
+		<!-- 
+		<div data-role="header">
+			<a href="#settings" data-icon="gear" class="ui-btn-right play-click"><img src="img/options.png"></a>
+		</div>
+		 -->
 		<div data-role="content">
+			<div id="progress-indicator"></div>
+			<div id="quitButton"><a href="#quitGame" data-role="button" data-icon="delete" data-iconpos="bottom" data-inline="true" class="ui-btn-right">Quit</a></div>
 			<!--
-			TODO images for question when only one term present
 			TODO bigger font for question (not in px, needs to scale well)
 			 -->
+			 <div class="clear"></div>
 			<div id="question-holder"><p>questions</p></div>
-			<fieldset id="answers" data-role="controlgroup">
-				<legend>Answer</legend>
-				<input type="radio" name="answer" id="a" value="a" />
-				<label for="a">A</label>
-				<input type="radio" name="answer" id="b" value="b" />
-				<label for="b">B</label>
-				<input type="radio" name="answer" id="c" value="c" />
-				<label for="c">C</label>
-				<input type="radio" name="answer" id="d" value="d" />
-				<label for="d">D</label>
-				
-				
-			</fieldset>
-			Alternative:
-			<div class="ui-grid-a">
+			<div class="ui-grid-c button-container">
 				<div class="ui-block-a">
-					<button type="button">A</button>
-					<button type="button">C</button>
+					<button type="button" class="play-click answer-button">A</button>
 				</div>
 				<div class="ui-block-b">
-					<button type="button">B</button>
-					<button type="button">D</button>
+					<button type="button" class="play-click answer-button">B</button>
+				</div>
+				<div class="ui-block-c">
+					<button type="button" class="play-click answer-button">C</button>
+				</div>
+				<div class="ui-block-d">
+					<button type="button" class="play-click answer-button">D</button>
 				</div>
 			</div>
-			<button id="confirm-answer" type="button">Confirm answer</button>
-			
 		</div>
-		<div data-role="footer"></div>
+		<div id="response-popup" data-position-to="#question-holder" data-dismissible="false" data-role="popup">
+			<span id="correct-wrong" class="answer-string"></span><br/>
+			<!--<span class="answer-string">Rätta svaret var</span><br/> -->
+			<div class = "wrong-answer-icon"><img class = "answer-icon" src="img/sad.png" align="middle"></div>
+			<div class = "right-answer-icon"><img class = "answer-icon" src="img/smile.png" align="middle"></div>
+			<span id="correct-answer-number" class=""></span>
+			<button type="button"  id="next-question" class="next-button">Nästa fråga</button>
+			<button type="button" id="play-bonus-game" class="bonus-button">Spela bonus-spelet</button>
+		</div>
 	</div>
 	<div data-role="page" id="settings">
-		<div data-role="header"></div>
-		<div data-role="content">
-			<p>settings</p>
-			<!-- TODO How to change min value of max slider to be selected value of min slider (eg. if min slider has value 20, change max sliders min value to 20) -->
-			<!-- alternatively use rangeslider plugin, but is deprecated in jqm 1.4.0 -->
-			<label for="min">Smallest numbers</label>
-			<input type="range" name="min" id="min" value="0" min="0" max="100" />
-			<label for="max">Largest numbers</label>
-			<input type="range" name="max" id="max" value="50" min="0" max="100" />
-			<fieldset data-role="controlgroup" data-type="horizontal">
-				<legend>Select arithmetic</legend>
-				<label for="addition">+</label>
-				<input type="checkbox" name="addition" id="addition">
-				<label for="subtraction">−</label>
-				<input type="checkbox" name="subtraction" id="subtraction">
-				<label for="multiplication">×</label>
-				<input type="checkbox" name="multiplication" id="multiplication">
-				<label for="division">÷</label>
-				<input type="checkbox" name="division" id="division">
-			</fieldset>
-			<div data-role="fieldcontain">
-			</div>
-
+		<div data-role="header">
+			<a href="#front" data-role="button" class="ui-btn-left play-click" id="save">Save</a>
+			<a href="#front" data-role="button" class="ui-btn-right play-click" id="cancel">Cancel</a>
 		</div>
-		<div data-role="footer"></div>
+		<div data-role="content">
+			<div id="settings-container">
+				<div data-role="rangeslider">
+					<label for="min">Lowest and highest possible numbers</label>
+					<input type="range" name="min" id="min" value="0" min="0" max="100" />
+					<input type="range" name="max" id="max" value="50" min="0" max="100" />
+				</div>
+				<fieldset data-role="controlgroup" id="arithmetic-settings" data-type="horizontal">
+					<legend>Select arithmetic</legend>
+					<label for="addition"  class="play-click">+</label>
+					<input type="checkbox" name="addition" id="addition">
+					<label for="subtraction"  class="play-click">−</label>
+					<input type="checkbox" name="subtraction" id="subtraction">
+					<label for="multiplication"  class="play-click">×</label>
+					<input type="checkbox" name="multiplication" id="multiplication">
+					<label for="division"  class="play-click">÷</label>
+					<input type="checkbox" name="division" id="division">
+					<label for="symbols" class="play-click">Symbols</label>
+					<input type="checkbox" name="symbols" id="symbols">
+				</fieldset>
+				<label for="flip-sound">Sound</label>
+				<select class="flip-sound" name="flip-sound" data-role="slider">
+					<option value="off">Off</option>
+					<option value="on">On</option>
+				</select>
+				<label for="flip-music">Music</label>
+				<select class="flip-music" name="flip-music" data-role="slider">
+					<option value="off" >Off</option>
+					<option value="on">On</option>
+				</select>
+				<div data-role="bonusslider">
+					<label for="bonus">Number of questions before Bonus Game(0 = No Bonus Game)</label>
+					<input type="range" name="bonus" id="bonus" value="10" min="0" max="10" />
+				</div>
+				<label for="stats">Statistics </label><a id="stats" href="#statistics"><img src="img/stats.png"/></a>
+			</div>
+		</div>
 	</div>
 	<!-- TODO add rewards page -->
 	<div data-role="page" id="rewards">
-		<div data-role="header"></div>
 		<div data-role="content">
+		<div id="bonus-game-container"></div>
 		</div>
-		<div data-role="footer"></div>
 	</div>
+	<div data-role="page" id="statistics">
+		<div data-role="content">
+			<div class="stats-buttons">
+				<a href="#settings" class="statistics-back-button"  data-rel="back" data-role="button" data-icon="arrow-l" data-inline="true">Back</a>
+				<a href="#resetStats" data-role="button" data-inline="true" data-rel="dialog" data-transition="pop"  class="reset-stats-button ui-btn ui-btn-inline ui-btn-corner-all ui-shadow ui-btn-up-c" data-close-btn="none">
+					<span class="ui-btn-inner ui-btn-corner-all">
+						<span class="ui-btn-text">Reset statistics</span>
+					</span>
+				</a>
+			</div>
+			<div class="stats-draw"></div>
+		</div>
+	</div>
+		<div data-role="page" id="resetStats">
+		<h1>Do you want to reset stats?<h1>
+		<a href="#resetStats" onclick="resetStats()" data-role="button" data-rel="dialog"class="ui-btn ui-btn-corner-all ui-shadow ui-btn-up-b" data-transition="pop" data-direction="reverse">
+			<span class="ui-btn-inner ui-btn-corner-all">
+			<span class="ui-btn-text">Yes</span>
+			</span>
+		</a>
+		<a href="#resetStats" onclick="cancel()"data-role="button" data-rel="dialog"class="ui-btn ui-btn-corner-all ui-shadow ui-btn-up-b" data-transition="pop" data-direction="reverse">
+			<span class="ui-btn-inner ui-btn-corner-all">
+			<span class="ui-btn-text">No</span>
+			</span>
+		</a>
+	</div>
+	<div data-role="page" id="quitGame">
+		<h1>Do you want to quit the game?<h1>
+		<a href="#front" onclick="quitGame()" data-role="button" data-rel="dialog" class="ui-btn ui-btn-corner-all ui-shadow ui-btn-up-b" data-transition="pop" data-direction="reverse">
+			<span class="ui-btn-inner ui-btn-corner-all">
+			<span class="ui-btn-text">Yes</span>
+			</span>
+		</a>
+		<a href="#questions" onclick="cancel()"data-role="button" data-rel="dialog"class="ui-btn ui-btn-corner-all ui-shadow ui-btn-up-b" data-transition="pop" data-direction="reverse">
+			<span class="ui-btn-inner ui-btn-corner-all">
+			<span class="ui-btn-text">No</span>
+			</span>
+		</a>
+	</div>
+	
        <!-- <div class="app">
             <h1>PhoneGap</h1>
             <div id="deviceready" class="blink">
@@ -126,10 +192,11 @@
             </div>
         </div> -->
         <script type="text/javascript" src="phonegap.js"></script><!-- needed by phonegap, do not delete this line -->
-        <script type="text/javascript" src="js/index.js"></script>
-	<script type="text/javascript" src="js/main.js"></script>
+        <!--
+	changed this to app.js and added as module
+	<script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
             app.initialize();
-        </script>
+        </script>-->
     </body>
 </html>
